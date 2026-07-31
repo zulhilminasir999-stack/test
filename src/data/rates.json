@@ -1,0 +1,90 @@
+{
+  "mileageRates": {
+    "Kereta": {
+      "first500": 1.00,
+      "above500": 0.90
+    },
+    "Motosikal": {
+      "first500": 0.90,
+      "above500": 0.55
+    }
+  },
+  "rankRates": {
+    "Brig Jen": {
+      "elaunHarian": {
+        "W1": 42.50,
+        "W2": 57.50
+      },
+      "elaunMakan": {
+        "W1": 85.00,
+        "W2": 115.00
+      },
+      "hotel": {
+        "W1": 260.00,
+        "W2": 290.00
+      },
+      "lojing": {
+        "W1": 100.00,
+        "W2": 120.00
+      },
+      "allowedAccommodation": ["Hotel", "Lojing"]
+    },
+    "Mej - Kol": {
+      "elaunHarian": {
+        "W1": 30.00,
+        "W2": 40.00
+      },
+      "elaunMakan": {
+        "W1": 60.00,
+        "W2": 80.00
+      },
+      "hotel": {
+        "W1": 240.00,
+        "W2": 270.00
+      },
+      "lojing": {
+        "W1": 100.00,
+        "W2": 120.00
+      },
+      "allowedAccommodation": ["Hotel", "Lojing"]
+    },
+    "LtM - Kapt": {
+      "elaunHarian": {
+        "W1": 22.50,
+        "W2": 32.50
+      },
+      "elaunMakan": {
+        "W1": 45.00,
+        "W2": 65.00
+      },
+      "hotel": {
+        "W1": 220.00,
+        "W2": 250.00
+      },
+      "lojing": {
+        "W1": 100.00,
+        "W2": 120.00
+      },
+      "allowedAccommodation": ["Hotel", "Lojing"]
+    },
+    "Pbt - PW1": {
+      "elaunHarian": {
+        "W1": 20.00,
+        "W2": 27.50
+      },
+      "elaunMakan": {
+        "W1": 40.00,
+        "W2": 55.00
+      },
+      "hotel": {
+        "W1": 200.00,
+        "W2": 230.00
+      },
+      "lojing": {
+        "W1": 100.00,
+        "W2": 120.00
+      },
+      "allowedAccommodation": ["Hotel", "Lojing"]
+    }
+  }
+}
