@@ -94,17 +94,30 @@ export function calculateClaim(
 
   // --- 1. USER MILEAGE ---
   const mileageRates = config.mileageRates[jenisKenderaan] || config.mileageRates.Kereta;
-  const km = Math.max(0, jumlahKm || 0);
+  const oneWayKm = Math.max(0, jumlahKm || 0);
+  // Total distance is round-trip (Pergi & Balik = x2)
+  const totalEffectiveKm = oneWayKm * 2;
 
-  const mileageFirst500Km = Math.min(km, 500);
-  const mileageFirst500Rate = mileageRates.first500;
-  const mileageFirst500Amount = km > 0 ? mileageFirst500Rate : 0;
+  let mileageFirst500Km = 0;
+  let mileageFirst500Rate = mileageRates.first500;
+  let mileageFirst500Amount = 0;
 
-  const mileageAbove500Km = Math.max(0, km - 500);
-  const mileageAbove500Rate = mileageRates.above500;
-  const mileageAbove500Amount = mileageAbove500Km > 0 ? mileageAbove500Rate : 0;
+  let mileageAbove500Km = 0;
+  let mileageAbove500Rate = mileageRates.above500;
+  let mileageAbove500Amount = 0;
 
-  const userMileageTotalAmount = mileageFirst500Amount + mileageAbove500Amount;
+  let userMileageTotalAmount = 0;
+
+  // Elaun jarak & penggunaan kenderaan HANYA dikira sekiranya user TIDAK memakai pemandu (!gunaPemandu)
+  if (!gunaPemandu) {
+    mileageFirst500Km = Math.min(totalEffectiveKm, 500);
+    mileageFirst500Amount = mileageFirst500Km * mileageFirst500Rate;
+
+    mileageAbove500Km = Math.max(0, totalEffectiveKm - 500);
+    mileageAbove500Amount = mileageAbove500Km * mileageAbove500Rate;
+
+    userMileageTotalAmount = mileageFirst500Amount + mileageAbove500Amount;
+  }
 
   // --- 2. USER ALLOWANCES ---
   const rankDetail = config.rankRates[pangkat] || config.rankRates['Pbt - PW1'];
@@ -132,20 +145,10 @@ export function calculateClaim(
 
   let hotelRate = 0;
   let hotelRateLabel = '';
-  const hotelRateVal = rankDetail.hotel[kawasan];
+  const hotelRateVal = rankDetail?.hotel?.[kawasan];
   if (typeof hotelRateVal === 'number') {
     hotelRate = hotelRateVal;
     hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam`;
-  } else if (hotelRateVal === 'Biasa') {
-    // For Brig Jen / High Rank where hotel rate is standard actual receipt
-    const benchmark = rankDetail.hotelDefaultBenchmark?.[kawasan] || 300;
-    if (kadarHotelBiasaActual && kadarHotelBiasaActual > 0) {
-      hotelRate = kadarHotelBiasaActual;
-      hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam (Resit)`;
-    } else {
-      hotelRate = benchmark;
-      hotelRateLabel = `RM ${benchmark.toFixed(2)} / malam (Standard)`;
-    }
   }
   const hotelAmount = hotelNights * hotelRate;
 
@@ -168,6 +171,7 @@ export function calculateClaim(
     totalAccommodationAmount;
 
   const userBreakdown: UserClaimBreakdown = {
+    totalEffectiveKm,
     mileageFirst500Km,
     mileageFirst500Rate,
     mileageFirst500Amount,
@@ -218,37 +222,35 @@ export function calculateClaim(
       subtotal: 0,
     };
   } else {
-    // Driver ALWAYS uses Pbt - PW1 rates!
+    // Driver uses Pbt - PW1 rates for daily & meal allowance
     const driverRankDetail = config.rankRates['Pbt - PW1'];
 
-    // Driver mileage is inherited from user
-    const driverMileageTotalAmount = userMileageTotalAmount;
+    // Mileage allowance is 0 when driver is used
+    const driverMileageTotalAmount = 0;
 
     // Driver Daily Allowance (Always gets Daily Allowance)
     const driverDailyRate = driverRankDetail.elaunHarian[kawasan] || 0;
     const driverDailyAmount = dailyAllowanceDays * driverDailyRate;
 
-    // Driver Meals & Hotel
-    let driverMealRate = 0;
-    let driverMealAmount = 0;
-    let driverHotelRate = 0;
-    let driverHotelAmount = 0;
+    // Driver Meals (Driver is never provided meals - always receives meal allowance for every duty day)
+    const driverMealRate = driverRankDetail.elaunMakan[kawasan] || 0;
+    const driverMealAmount = mealAllowanceDays * driverMealRate;
+
+    // Driver Accommodation
+    let driverAccomRate = 0;
+    let driverAccomAmount = 0;
 
     if (!pemanduDisediakanKemudahan) {
-      // Not provided, driver pays themselves
-      driverMealRate = driverRankDetail.elaunMakan[kawasan] || 0;
-      driverMealAmount = mealAllowanceDays * driverMealRate;
-
-      const pbtHotelVal = driverRankDetail.hotel[kawasan];
-      driverHotelRate = typeof pbtHotelVal === 'number' ? pbtHotelVal : 0;
-      driverHotelAmount = totalAccommodationNights * driverHotelRate;
+      // Driver gets the same accommodation claim rate & amount as user
+      driverAccomAmount = totalAccommodationAmount;
+      driverAccomRate = hotelNights > 0 ? hotelRate : lojingRate;
     }
 
     const driverSubtotal =
       driverMileageTotalAmount +
       driverDailyAmount +
       driverMealAmount +
-      driverHotelAmount;
+      driverAccomAmount;
 
     driverBreakdown = {
       applicableRank: 'Pbt - PW1',
@@ -259,10 +261,10 @@ export function calculateClaim(
       mealAllowanceDays,
       mealAllowanceRate: driverMealRate,
       mealAllowanceAmount: driverMealAmount,
-      isMealProvided: pemanduDisediakanKemudahan,
+      isMealProvided: false,
       accommodationNights: totalAccommodationNights,
-      accommodationRate: driverHotelRate,
-      accommodationAmount: driverHotelAmount,
+      accommodationRate: driverAccomRate,
+      accommodationAmount: driverAccomAmount,
       isAccommodationProvided: pemanduDisediakanKemudahan,
       subtotal: driverSubtotal,
     };

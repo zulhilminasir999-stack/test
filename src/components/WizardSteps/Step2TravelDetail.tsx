@@ -38,41 +38,48 @@ interface Step2TravelDetailProps {
 const rankOptions: OptionItem<RankType>[] = [
   {
     value: 'Pbt - PW1',
-    label: 'Pbt – PW1',
+    label: 'PBT – PW1',
   },
   {
     value: 'LtM - Kapt',
-    label: 'LtM - Kapt',
+    label: 'LTM – KAPT',
   },
   {
     value: 'Mej - Kol',
-    label: 'Mej – Kol',
-  },
-  {
-    value: 'Brig Jen',
-    label: 'Brig Jen',
+    label: 'MEJ – KOL',
   },
 ];
 
 const vehicleOptions: OptionItem<VehicleType>[] = [
   {
     value: 'Kereta',
-    label: 'Kereta',
+    label: 'KERETA',
   },
   {
     value: 'Motosikal',
-    label: 'Motosikal',
+    label: 'MOTOSIKAL',
   },
 ];
 
 const areaOptions: OptionItem<AreaType>[] = [
   {
     value: 'W1',
-    label: 'Semenanjung Malaysia (W1)',
+    label: 'SEMENANJUNG MALAYSIA (W1)',
   },
   {
     value: 'W2',
-    label: 'Sabah / Sarawak / Labuan (W2)',
+    label: 'SABAH / SARAWAK / LABUAN (W2)',
+  },
+];
+
+const accommodationOptions: OptionItem<AccommodationType>[] = [
+  {
+    value: 'Hotel',
+    label: 'HOTEL',
+  },
+  {
+    value: 'Lojing',
+    label: 'LOJING',
   },
 ];
 
@@ -97,10 +104,7 @@ export function Step2TravelDetail({
   const hotelVal = rankDetail && formData.kawasan ? rankDetail.hotel[formData.kawasan] : null;
   const currentRankHotelRate = typeof hotelVal === 'number'
     ? `RM ${hotelVal.toFixed(2)}/malam`
-    : hotelVal === 'Biasa'
-      ? 'Resit Sebenar'
-      : '-';
-  const isBrigJenBiasa = hotelVal === 'Biasa';
+    : '-';
 
   // Compute live duration
   const durationInfo = calculateTravelDuration(
@@ -128,8 +132,6 @@ export function Step2TravelDetail({
       accomOption = 'Hotel';
     } else if (currentLojingNights > 0 && currentHotelNights === 0) {
       accomOption = 'Lojing';
-    } else if (currentHotelNights > 0 && currentLojingNights > 0) {
-      accomOption = 'Campuran';
     } else {
       accomOption = '';
     }
@@ -138,41 +140,35 @@ export function Step2TravelDetail({
   const isHotelSelected =
     !isLessThanOneDay &&
     (formData.jenisPenginapan === 'Hotel' ||
-      formData.jenisPenginapan === 'Campuran' ||
-      currentHotelNights > 0);
+      (currentHotelNights > 0 && currentLojingNights === 0));
 
   const isLojingSelected =
     !isLessThanOneDay &&
     (formData.jenisPenginapan === 'Lojing' ||
-      formData.jenisPenginapan === 'Campuran' ||
-      currentLojingNights > 0);
+      (currentLojingNights > 0 && currentHotelNights === 0));
 
-  const handleToggleHotel = () => {
+  const handleAccommodationChange = (val: string) => {
     if (isLessThanOneDay) return;
-    if (isHotelSelected) {
+    if (val === 'Hotel') {
       updateFormData({
-        bilMalamHotel: 0,
-        bilMalamPenginapan: isLojingSelected ? totalNights : 0,
-      });
-    } else {
-      updateFormData({
+        jenisPenginapan: 'Hotel',
         bilMalamHotel: totalNights,
+        bilMalamLojing: 0,
         bilMalamPenginapan: totalNights,
       });
-    }
-  };
-
-  const handleToggleLojing = () => {
-    if (isLessThanOneDay) return;
-    if (isLojingSelected) {
+    } else if (val === 'Lojing') {
       updateFormData({
-        bilMalamLojing: 0,
-        bilMalamPenginapan: isHotelSelected ? totalNights : 0,
+        jenisPenginapan: 'Lojing',
+        bilMalamLojing: totalNights,
+        bilMalamHotel: 0,
+        bilMalamPenginapan: totalNights,
       });
     } else {
       updateFormData({
-        bilMalamLojing: totalNights,
-        bilMalamPenginapan: totalNights,
+        jenisPenginapan: '',
+        bilMalamHotel: 0,
+        bilMalamLojing: 0,
+        bilMalamPenginapan: 0,
       });
     }
   };
@@ -249,7 +245,7 @@ export function Step2TravelDetail({
   return (
     <form onSubmit={handleSubmit} className="space-y-6 w-full" id="step2-form">
       {/* Main Form Container Box */}
-      <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-100 shadow-sm space-y-5 my-2 sm:my-3">
+      <div className="bg-white p-6 sm:p-8 pb-12 sm:pb-16 rounded-2xl border border-slate-100 shadow-sm space-y-5 my-2 sm:my-3">
         {/* Container Title */}
         <div className="pb-2 border-b border-slate-100">
           <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
@@ -306,34 +302,76 @@ export function Step2TravelDetail({
           </div>
 
           {/* Jumlah Kilometer */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-semibold text-slate-700">
-              Jumlah Kilometer <span className="text-amber-600">*</span>
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                id="input-jumlah-km"
-                min="0"
-                step="0.1"
-                required
-                value={formData.jumlahKm || ''}
-                onChange={(e) =>
-                  updateFormData({
-                    jumlahKm: Math.max(0, parseFloat(e.target.value) || 0),
-                  })
-                }
-                placeholder="Masukkan Jumlah Kilometer (KM)"
-                className={`w-full px-3.5 py-2.5 bg-white border rounded-xl text-slate-800 text-base md:text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all placeholder:text-slate-400 placeholder:font-normal ${
-                  submitted && !isJumlahKmValid
-                    ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
-                    : 'border-slate-300 hover:border-slate-400'
-                }`}
-              />
-              {submitted && !isJumlahKmValid && (
-                <p className="text-xs text-red-600 font-semibold mt-1">Sila masukkan Jumlah Kilometer (KM) yang sah</p>
-              )}
+          <div className="space-y-2">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700">
+                Jumlah Kilometer <span className="text-amber-600">*</span>
+              </label>
             </div>
+
+            <div className="space-y-2 bg-slate-50/70 p-3 rounded-xl border border-slate-200/80">
+              <div className="flex items-center gap-3">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  value={formData.jumlahKm || 0}
+                  onChange={(e) =>
+                    updateFormData({
+                      jumlahKm: Math.max(0, parseFloat(e.target.value) || 0),
+                    })
+                  }
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-500 [&::-webkit-slider-thumb]:hover:bg-amber-600 [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:shadow-sm [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-amber-500 [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:cursor-pointer"
+                />
+                <div className="relative shrink-0">
+                  <input
+                    type="number"
+                    id="input-jumlah-km"
+                    min="0"
+                    step="0.1"
+                    required
+                    value={formData.jumlahKm || ''}
+                    onChange={(e) =>
+                      updateFormData({
+                        jumlahKm: Math.max(0, parseFloat(e.target.value) || 0),
+                      })
+                    }
+                    placeholder="0"
+                    className={`w-28 px-3 py-2 bg-white border rounded-lg text-slate-800 text-sm font-semibold text-right pr-9 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all ${
+                      submitted && !isJumlahKmValid
+                        ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
+                        : 'border-slate-300 hover:border-slate-400'
+                    }`}
+                  />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-medium text-slate-400 pointer-events-none">
+                    KM
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Preset Buttons */}
+              <div className="flex items-center gap-2 pt-1 overflow-x-auto touch-pan-x scroll-smooth pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                {[10, 25, 50, 75, 100, 150, 200, 250, 300, 350, 400, 500].map((preset) => (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => updateFormData({ jumlahKm: preset })}
+                    className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-all shrink-0 active:scale-95 touch-manipulation ${
+                      formData.jumlahKm === preset
+                        ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
+                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    {preset} KM
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {submitted && !isJumlahKmValid && (
+              <p className="text-xs text-red-600 font-semibold mt-1">Sila masukkan Jumlah Kilometer (KM) yang sah</p>
+            )}
           </div>
         </div>
 
@@ -470,103 +508,29 @@ export function Step2TravelDetail({
               </div>
             </div>
           ) : (
-            <>
-              {/* Option tick cards */}
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold text-slate-700">
-                  Pilih Jenis Penginapan <span className="text-amber-600">*</span>
-                </label>
-
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Hotel Option */}
-                    <button
-                      type="button"
-                      id="btn-penginapan-hotel"
-                      onClick={handleToggleHotel}
-                      disabled={isLessThanOneDay}
-                      className={`p-4 rounded-xl border text-left flex items-start justify-between transition-all w-full h-full ${
-                        isLessThanOneDay
-                          ? 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed'
-                          : isHotelSelected
-                          ? 'border-amber-500 bg-amber-50/50 ring-1 ring-amber-500/80 shadow-2xs cursor-pointer'
-                          : 'border-slate-200 hover:border-slate-300 bg-white cursor-pointer'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
-                            isHotelSelected
-                              ? 'border-amber-800 bg-amber-800 text-white'
-                              : 'border-slate-300 bg-white'
-                          }`}
-                        >
-                          {isHotelSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-900">Hotel</h4>
-                      </div>
-                    </button>
-
-                    {/* Lojing Option */}
-                    <button
-                      type="button"
-                      id="btn-penginapan-lojing"
-                      onClick={handleToggleLojing}
-                      disabled={isLessThanOneDay}
-                      className={`p-4 rounded-xl border text-left flex items-start justify-between transition-all w-full h-full ${
-                        isLessThanOneDay
-                          ? 'border-slate-200 bg-slate-50 opacity-60 cursor-not-allowed'
-                          : isLojingSelected
-                          ? 'border-amber-500 bg-amber-50/50 ring-1 ring-amber-500/80 shadow-2xs cursor-pointer'
-                          : 'border-slate-200 hover:border-slate-300 bg-white cursor-pointer'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
-                            isLojingSelected
-                              ? 'border-amber-800 bg-amber-800 text-white'
-                              : 'border-slate-300 bg-white'
-                          }`}
-                        >
-                          {isLojingSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                        </div>
-                        <h4 className="text-sm font-bold text-slate-900">Lojing</h4>
-                      </div>
-                    </button>
-                  </div>
-
-                  <p className="text-[11px] font-medium text-amber-800/90 pl-1 mt-0.5">
-                    * {isLessThanOneDay ? 'Kurang daripada 1 hari (Tiada Penginapan)' : 'Boleh pilih satu atau kedua-duanya'}
-                  </p>
-                </div>
-              </div>
-            </>
-          )}
-
-
-
-          {isBrigJenBiasa && (formData.bilMalamHotel || 0) > 0 && (
-            <div className="space-y-1.5">
+            <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-700">
-                Kadar Resit Sebenar Hotel (RM / Malam)
+                Pilih Jenis Penginapan <span className="text-amber-600">*</span>
               </label>
-              <input
-                type="number"
-                id="input-hotel-biasa-actual"
-                min="0"
-                step="0.01"
-                value={formData.kadarHotelBiasaActual || ''}
-                onChange={(e) =>
-                  updateFormData({
-                    kadarHotelBiasaActual: parseFloat(e.target.value) || 0,
-                  })
-                }
-                placeholder="Contoh: 350.00"
-                className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+
+              <SearchableDropdown<AccommodationType | ''>
+                id="dropdown-penginapan"
+                required
+                hideBadge
+                hasError={submitted && !formData.jenisPenginapan}
+                options={accommodationOptions}
+                value={formData.jenisPenginapan || (isHotelSelected ? 'Hotel' : isLojingSelected ? 'Lojing' : '')}
+                onChange={(val) => handleAccommodationChange(val)}
+                placeholder="Pilih Jenis Penginapan"
               />
+              {submitted && !formData.jenisPenginapan && (
+                <p className="text-xs text-red-600 font-semibold mt-1">Sila pilih jenis penginapan</p>
+              )}
             </div>
           )}
+
+
+
         </div>
       </div>
 

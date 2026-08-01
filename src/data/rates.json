@@ -10,25 +10,6 @@
     }
   },
   "rankRates": {
-    "Brig Jen": {
-      "elaunHarian": {
-        "W1": 42.50,
-        "W2": 57.50
-      },
-      "elaunMakan": {
-        "W1": 85.00,
-        "W2": 115.00
-      },
-      "hotel": {
-        "W1": 260.00,
-        "W2": 290.00
-      },
-      "lojing": {
-        "W1": 100.00,
-        "W2": 120.00
-      },
-      "allowedAccommodation": ["Hotel", "Lojing"]
-    },
     "Mej - Kol": {
       "elaunHarian": {
         "W1": 30.00,

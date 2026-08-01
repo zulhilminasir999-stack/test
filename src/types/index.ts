@@ -1,4 +1,4 @@
-export type RankType = 'Pbt - PW1' | 'LtM - Kapt' | 'Mej - Kol' | 'Brig Jen';
+export type RankType = 'Pbt - PW1' | 'LtM - Kapt' | 'Mej - Kol';
 
 export type VehicleType = 'Kereta' | 'Motosikal';
 
@@ -71,6 +71,7 @@ export interface BreakdownItem {
 }
 
 export interface UserClaimBreakdown {
+  totalEffectiveKm: number;
   mileageFirst500Km: number;
   mileageFirst500Rate: number;
   mileageFirst500Amount: number;

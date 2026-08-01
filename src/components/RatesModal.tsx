@@ -67,47 +67,6 @@ export function RatesModal({ isOpen, onClose }: RatesModalProps) {
         <div className="p-6 overflow-y-auto space-y-6 text-xs text-slate-800 flex-1">
           {activeTab === 'jadual' ? (
             <div className="space-y-6">
-              {/* Brig Jen */}
-              <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                <div className="bg-slate-900 text-white p-3 font-bold flex justify-between items-center">
-                  <span>Brig Jen (Pegawai Tinggi)</span>
-                  <span className="text-[10px] bg-orange-500/20 text-orange-300 px-2 py-0.5 rounded">
-                    W1 / W2
-                  </span>
-                </div>
-                <table className="w-full text-left">
-                  <thead className="bg-slate-50 border-b border-slate-200 font-bold text-slate-700">
-                    <tr>
-                      <th className="p-2.5">Kategori</th>
-                      <th className="p-2.5 text-right">W1 (Semenanjung)</th>
-                      <th className="p-2.5 text-right">W2 (Sabah/Sarawak)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr>
-                      <td className="p-2.5 font-semibold">Elaun Harian</td>
-                      <td className="p-2.5 text-right ">RM 42.50</td>
-                      <td className="p-2.5 text-right ">RM 57.50</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2.5 font-semibold">Elaun Makan</td>
-                      <td className="p-2.5 text-right ">RM 85.00</td>
-                      <td className="p-2.5 text-right ">RM 115.00</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2.5 font-semibold">Hotel</td>
-                      <td className="p-2.5 text-right ">RM 260.00</td>
-                      <td className="p-2.5 text-right ">RM 290.00</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2.5 font-semibold">Lojing</td>
-                      <td className="p-2.5 text-right ">RM 100.00</td>
-                      <td className="p-2.5 text-right ">RM 120.00</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
               {/* Mej - Kol */}
               <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                 <div className="bg-slate-800 text-white p-3 font-bold flex justify-between items-center">

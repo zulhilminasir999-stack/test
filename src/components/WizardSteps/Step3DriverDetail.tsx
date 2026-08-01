@@ -52,8 +52,8 @@ export function Step3DriverDetail({
             id="dropdown-guna-pemandu"
             required
             options={[
-              { value: 'ya', label: 'Ya', sublabel: 'Menggunakan pemandu bagi perjalanan ini' },
-              { value: 'tidak', label: 'Tidak', sublabel: 'Memandu sendiri / tanpa pemandu' },
+              { value: 'ya', label: 'Ya' },
+              { value: 'tidak', label: 'Tidak' },
             ]}
             value={formData.gunaPemandu ? 'ya' : 'tidak'}
             onChange={(val) => updateFormData({ gunaPemandu: val === 'ya' })}
@@ -64,34 +64,21 @@ export function Step3DriverDetail({
         {/* Section 2: Kemudahan Pemandu (if Guna Pemandu = Ya) */}
         {formData.gunaPemandu && (
           <div className="space-y-4 pt-4 border-t border-slate-100 animate-in fade-in duration-200">
-            {/* Info Box */}
-            <div className="bg-[#EFF6FF] border border-blue-200/80 rounded-xl p-4 shadow-2xs">
-              <div className="space-y-1 text-xs text-blue-900">
-                <h4 className="font-bold text-xs text-blue-900">Nota Tuntutan Pemandu</h4>
-                <ul className="list-disc pl-4 space-y-0.5 font-medium text-blue-800 leading-relaxed">
-                  <li>
-                    Tuntutan pemandu menggunakan kadar Pbt – PW1
-                  </li>
-                  <li>Jenis kenderaan, KM & kawasan (W1/W2) mengikut pengguna</li>
-                </ul>
-              </div>
-            </div>
-
             {/* Kemudahan Pemandu Dropdown */}
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-slate-700">
-                Adakah penginapan dan makan pemandu disediakan? <span className="text-amber-600">*</span>
+                Adakah penginapan pemandu disediakan? <span className="text-amber-600">*</span>
               </label>
               <SearchableDropdown<string>
                 id="dropdown-pemandu-disediakan"
                 required
                 options={[
-                  { value: 'ya', label: 'Ya', sublabel: 'Penginapan dan makan telah disediakan oleh ATM' },
-                  { value: 'tidak', label: 'Tidak', sublabel: 'Pemandu membayar sendiri penginapan dan makan' },
+                  { value: 'ya', label: 'Ya', sublabel: 'Penginapan telah disediakan' },
+                  { value: 'tidak', label: 'Tidak', sublabel: 'Pemandu membayar sendiri penginapan' },
                 ]}
                 value={formData.pemanduDisediakanKemudahan ? 'ya' : 'tidak'}
                 onChange={(val) => updateFormData({ pemanduDisediakanKemudahan: val === 'ya' })}
-                placeholder="Pilih Kemudahan Pemandu"
+                placeholder="Pilih Status Penginapan Pemandu"
               />
             </div>
 
@@ -100,31 +87,30 @@ export function Step3DriverDetail({
               {!formData.pemanduDisediakanKemudahan ? (
                 <>
                   <h4 className="text-xs font-bold text-emerald-900">
-                    Penginapan & Makan Tidak Disediakan (Tanggung Sendiri)
+                    Penginapan Tidak Disediakan
                   </h4>
                   <p className="text-xs font-medium text-emerald-800">Kelayakan Pemandu:</p>
                   <ul className="list-disc pl-5 space-y-0.5 text-xs font-medium text-emerald-800">
-                    <li>Tuntutan KM</li>
                     <li>Elaun Harian</li>
                     <li>Elaun Makan</li>
-                    <li>Hotel (kadar Pbt – PW1)</li>
+                    <li>Penginapan (kadar sama seperti pengguna)</li>
                   </ul>
                   <p className="text-[11px] italic text-emerald-700/90 pt-0.5">
-                    * Pemandu tidak layak menuntut Lojing
+                    * Elaun jarak / penggunaan kenderaan tidak dikira apabila menggunakan pemandu
                   </p>
                 </>
               ) : (
                 <>
                   <h4 className="text-xs font-bold text-emerald-900">
-                    Penginapan & Makan Disediakan
+                    Penginapan Disediakan
                   </h4>
                   <p className="text-xs font-medium text-emerald-800">Kelayakan Pemandu:</p>
                   <ul className="list-disc pl-5 space-y-0.5 text-xs font-medium text-emerald-800">
-                    <li>Tuntutan KM</li>
                     <li>Elaun Harian</li>
+                    <li>Elaun Makan</li>
                   </ul>
                   <p className="text-[11px] italic text-emerald-700/90 pt-0.5">
-                    * Pemandu tidak layak menuntut Elaun Makan, Hotel atau Lojing kerana telah disediakan
+                    * Penginapan pemandu telah disediakan (Tiada tuntutan penginapan).
                   </p>
                 </>
               )}

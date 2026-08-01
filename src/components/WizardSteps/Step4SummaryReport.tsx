@@ -103,7 +103,7 @@ export function Step4SummaryReport({
             </div>
             <div>
               <span className="text-slate-500 block text-[11px] font-medium">Jumlah KM</span>
-              <span className="font-bold text-slate-900 text-sm">{formData.jumlahKm} KM</span>
+              <span className="font-bold text-slate-900 text-sm">{formData.jumlahKm} KM (Pergi & Balik: {(formData.jumlahKm || 0) * 2} KM)</span>
             </div>
             <div>
               <span className="text-slate-500 block text-[11px] font-medium">Kawasan</span>
@@ -142,11 +142,17 @@ export function Step4SummaryReport({
             {/* Tuntutan KM */}
             <div className="py-2.5 flex justify-between items-center">
               <div>
-                <span className="font-bold text-slate-900 block">Tuntutan KM</span>
+                <span className="font-bold text-slate-900 block">Tuntutan KM (Pergi & Balik)</span>
                 <span className="text-slate-500 text-[11px]">
-                  {formData.jumlahKm} KM - {formData.jenisKenderaan}
-                  {userBreakdown.mileageFirst500Km > 0 && userBreakdown.mileageAbove500Km === 0 ? ' (0-500km)' : ''}
-                  {userBreakdown.mileageAbove500Km > 0 ? ' (0-500km + 501km+)' : ''}
+                  {formData.gunaPemandu ? (
+                    <span className="text-amber-700 font-semibold">* Pemandu disediakan (Tiada tuntutan KM)</span>
+                  ) : (
+                    <>
+                      {userBreakdown.totalEffectiveKm || ((formData.jumlahKm || 0) * 2)} KM ({formData.jumlahKm} KM x 2) - {formData.jenisKenderaan}
+                      {userBreakdown.mileageFirst500Km > 0 && userBreakdown.mileageAbove500Km === 0 ? ` (0-500km @ RM${userBreakdown.mileageFirst500Rate.toFixed(2)}/km)` : ''}
+                      {userBreakdown.mileageAbove500Km > 0 ? ` (500km @ RM${userBreakdown.mileageFirst500Rate.toFixed(2)} + ${userBreakdown.mileageAbove500Km}km @ RM${userBreakdown.mileageAbove500Rate.toFixed(2)})` : ''}
+                    </>
+                  )}
                 </span>
               </div>
               <span className="font-bold text-slate-900 text-sm">
@@ -229,16 +235,16 @@ export function Step4SummaryReport({
 
             {/* Green Nota Banner */}
             <div className="bg-emerald-100/80 p-3 rounded-xl text-xs text-emerald-900 font-medium">
-              <strong>Nota:</strong> Semua tuntutan pemandu menggunakan kadar <strong>Pbt – PW1</strong>
+              <strong>Nota:</strong> Tuntutan harian & makan pemandu menggunakan kadar <strong>Pbt – PW1</strong>. Kadar penginapan adalah sama seperti pengguna.
             </div>
 
             <div className="divide-y divide-emerald-200/60 text-xs">
               {/* Tuntutan KM */}
               <div className="py-2.5 flex justify-between items-center">
                 <div>
-                  <span className="font-bold text-slate-900 block">Tuntutan KM</span>
-                  <span className="text-slate-500 text-[11px]">
-                    {formData.jumlahKm} KM - {formData.jenisKenderaan} (Kadar Pbt-PW1) (0-500km)
+                  <span className="font-bold text-slate-900 block">Tuntutan KM (Pergi & Balik)</span>
+                  <span className="text-emerald-800 font-medium text-[11px]">
+                    * Pemandu disediakan (Tiada tuntutan KM)
                   </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
@@ -250,7 +256,9 @@ export function Step4SummaryReport({
               <div className="py-2.5 flex justify-between items-center">
                 <div>
                   <span className="font-bold text-slate-900 block">Elaun Harian</span>
-                  <span className="text-slate-500 text-[11px]">{formData.kawasan}</span>
+                  <span className="text-slate-500 text-[11px]">
+                    {driverBreakdown.dailyAllowanceDays} Hari x {formatMYR(driverBreakdown.dailyAllowanceRate)} ({formData.kawasan})
+                  </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
                   {formatMYR(driverBreakdown.dailyAllowanceAmount)}
@@ -261,18 +269,22 @@ export function Step4SummaryReport({
               <div className="py-2.5 flex justify-between items-center">
                 <div>
                   <span className="font-bold text-slate-900 block">Elaun Makan</span>
-                  <span className="text-slate-500 text-[11px]">{formData.kawasan}</span>
+                  <span className="text-slate-500 text-[11px]">
+                    {driverBreakdown.mealAllowanceDays} Hari x {formatMYR(driverBreakdown.mealAllowanceRate)} ({formData.kawasan})
+                  </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
                   {formatMYR(driverBreakdown.mealAllowanceAmount)}
                 </span>
               </div>
 
-              {/* Hotel */}
+              {/* Penginapan */}
               <div className="py-2.5 flex justify-between items-center">
                 <div>
-                  <span className="font-bold text-slate-900 block">Hotel</span>
-                  <span className="text-slate-500 text-[11px]">{formData.kawasan} (Kadar Pbt-PW1)</span>
+                  <span className="font-bold text-slate-900 block">Penginapan</span>
+                  <span className="text-slate-500 text-[11px]">
+                    {driverBreakdown.accommodationNights} Malam x {formatMYR(driverBreakdown.accommodationRate)} (Kadar sama pengguna)
+                  </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
                   {formatMYR(driverBreakdown.accommodationAmount)}
@@ -280,9 +292,9 @@ export function Step4SummaryReport({
               </div>
 
               <p className="py-2 text-[11px] italic text-emerald-800 font-medium">
-                {driverBreakdown.isAccommodationProvided || driverBreakdown.isMealProvided
-                  ? '* Pemandu tidak layak menuntut Elaun Makan, Hotel atau Lojing kerana telah disediakan'
-                  : '* Pemandu tidak layak menuntut Lojing (menggunakan kadar Pbt – PW1)'}
+                {driverBreakdown.isAccommodationProvided
+                  ? '* Penginapan pemandu telah disediakan (Tiada tuntutan penginapan)'
+                  : '* Kadar penginapan pemandu disamakan mengikut kelayakan penginapan pengguna'}
               </p>
             </div>
 

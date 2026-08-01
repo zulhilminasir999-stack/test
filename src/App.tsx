@@ -95,18 +95,16 @@ export default function App() {
     <SmoothScroll>
       <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col selection:bg-orange-500 selection:text-white">
         {/* Header Section */}
-      <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-40 shadow-xs">
-        <div className="flex items-center gap-4">
-          <div>
-            <h1 className="text-sm sm:text-base font-bold text-slate-800 leading-tight uppercase tracking-tight">
-              PORTAL TUNTUTAN PERJALANAN ANGGOTA
-            </h1>
-            <p className="text-xs text-slate-500 font-medium">Angkatan Tentera Malaysia (ATM)</p>
-          </div>
+      <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-40 shadow-xs relative">
+        <div className="flex-1 text-center">
+          <h1 className="text-sm sm:text-base font-bold text-slate-800 leading-tight uppercase tracking-tight text-center">
+            PORTAL TUNTUTAN PERJALANAN ANGGOTA
+          </h1>
+          <p className="text-xs text-slate-500 font-medium text-center">Angkatan Tentera Malaysia (ATM)</p>
         </div>
 
         {/* Profile Info */}
-        <div className="flex items-center gap-3 sm:gap-6">
+        <div className="flex items-center gap-3 sm:gap-6 absolute right-4 sm:right-8">
           <div className="hidden md:flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-semibold text-slate-800">
@@ -150,7 +148,7 @@ export default function App() {
                 </button>
 
                 <span
-                  className={`text-[9px] sm:text-[11px] font-bold uppercase tracking-wider leading-tight transition-colors text-center px-0.5 ${
+                  className={`text-[9px] sm:text-[11px] font-bold tracking-wider leading-tight transition-colors text-center px-0.5 ${
                     isCurrent
                       ? 'text-orange-600'
                       : isCompleted
@@ -175,7 +173,7 @@ export default function App() {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 space-y-6">
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-8 pb-20 sm:pb-32 space-y-6">
         <div className="relative">
           <AnimatePresence mode="wait">
             <motion.div
