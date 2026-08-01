@@ -145,7 +145,7 @@ export function Step4SummaryReport({
                 <span className="font-bold text-slate-900 block">Tuntutan KM (Pergi & Balik)</span>
                 <span className="text-slate-500 text-[11px]">
                   {formData.gunaPemandu ? (
-                    <span className="text-amber-700 font-semibold">* Pemandu disediakan (Tiada tuntutan KM)</span>
+                    <span className="text-blue-800 font-medium">* Pemandu disediakan (Tiada tuntutan KM)</span>
                   ) : (
                     <>
                       {userBreakdown.totalEffectiveKm || ((formData.jumlahKm || 0) * 2)} KM ({formData.jumlahKm} KM x 2) - {formData.jenisKenderaan}
@@ -166,7 +166,7 @@ export function Step4SummaryReport({
                 <span className="font-bold text-slate-900 block">Bayaran Tol</span>
                 <span className="text-slate-500 text-[11px]">
                   {formData.gunaPemandu ? (
-                    <span className="text-amber-700 font-semibold">* Pemandu disediakan (Tol tidak dituntut)</span>
+                    <span className="text-blue-800 font-medium">* Pemandu disediakan (Tol tidak dituntut)</span>
                   ) : (
                     `Tuntutan Resit / TnG`
                   )}
@@ -183,14 +183,14 @@ export function Step4SummaryReport({
                 <div>
                   <span className="font-bold text-slate-900 block">Elaun Harian</span>
                   <span className="text-slate-500 text-[11px]">
-                    {userBreakdown.dailyAllowanceDays} Hari x {formatMYR(userBreakdown.dailyAllowanceRate)} <span className="text-amber-800 font-medium">({formData.kawasan})</span>
+                    {userBreakdown.dailyAllowanceDays} Hari x {formatMYR(userBreakdown.dailyAllowanceRate)} ({formData.kawasan})
                   </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
                   {formatMYR(userBreakdown.dailyAllowanceAmount)}
                 </span>
               </div>
-              <p className="text-[11px] text-amber-800 font-medium mt-1 leading-relaxed">
+              <p className="text-[11px] text-blue-800 font-medium mt-1 leading-relaxed">
                 {userBreakdown.dailyAllowanceDays > 0
                   ? `* Layak: Bertugas > 24 jam (${durationInfo.totalHours.toFixed(1)}j) dengan lebihan masa hari terakhir > 8 jam.`
                   : durationInfo.totalHours <= 24
@@ -204,7 +204,7 @@ export function Step4SummaryReport({
               <div>
                 <span className="font-bold text-slate-900 block">Elaun Makan</span>
                 <span className="text-slate-500 text-[11px]">
-                  {userBreakdown.mealAllowanceDays} Hari x {formatMYR(userBreakdown.mealAllowanceRate)} <span className="text-amber-800 font-medium">({formData.kawasan})</span>
+                  {userBreakdown.mealAllowanceDays} Hari x {formatMYR(userBreakdown.mealAllowanceRate)} ({formData.kawasan})
                 </span>
               </div>
               <span className="font-bold text-slate-900 text-sm">
@@ -219,7 +219,7 @@ export function Step4SummaryReport({
                   <div>
                     <span className="font-bold text-slate-900 block">Hotel</span>
                     <span className="text-slate-500 text-[11px]">
-                      {userBreakdown.hotelNights} Malam x {formatMYR(userBreakdown.hotelRate)} <span className="text-amber-800 font-medium">({formData.kawasan})</span>
+                      {userBreakdown.hotelNights} Malam x {formatMYR(userBreakdown.hotelRate)} ({formData.kawasan})
                     </span>
                   </div>
                   <span className="font-bold text-slate-900 text-sm">
@@ -227,7 +227,7 @@ export function Step4SummaryReport({
                   </span>
                 </div>
                 {userBreakdown.hotelNights > 0 && typeof userBreakdown.enteredHotelPrice === 'number' && typeof userBreakdown.maxHotelRate === 'number' && (
-                  <p className="text-[11px] text-amber-800 font-medium mt-1 leading-relaxed">
+                  <p className="text-[11px] text-blue-800 font-medium mt-1 leading-relaxed">
                     * {(userBreakdown.enteredHotelPrice / userBreakdown.hotelNights) > userBreakdown.maxHotelRate 
                       ? `Harga resit (RM ${(userBreakdown.enteredHotelPrice / userBreakdown.hotelNights).toFixed(2)}/malam) melebihi kelayakan. Tuntutan dihadkan kepada ${formatMYR(userBreakdown.maxHotelRate)}/malam.`
                       : `Tuntutan mengikut harga resit.`}
@@ -242,7 +242,7 @@ export function Step4SummaryReport({
                 <div>
                   <span className="font-bold text-slate-900 block">Elaun Lojing</span>
                   <span className="text-slate-500 text-[11px]">
-                    {userBreakdown.lojingNights} Malam x {formatMYR(userBreakdown.lojingRate)} <span className="text-amber-800 font-medium">({formData.kawasan})</span>
+                    {userBreakdown.lojingNights} Malam x {formatMYR(userBreakdown.lojingRate)} ({formData.kawasan})
                   </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
@@ -270,7 +270,7 @@ export function Step4SummaryReport({
 
             {/* Green Nota Banner */}
             <div className="bg-emerald-100/80 p-3 rounded-xl text-xs text-emerald-900 font-medium">
-              <strong>Nota:</strong> Tuntutan harian & makan pemandu menggunakan kadar <strong>Pbt – PW1</strong>. Kadar penginapan adalah sama seperti anggota.
+              <strong>Nota:</strong> Kadar harian & makan mengikut <strong>Pbt – PW1</strong>.
             </div>
 
             <div className="divide-y divide-emerald-200/60 text-xs">
@@ -293,7 +293,7 @@ export function Step4SummaryReport({
                   <div>
                     <span className="font-bold text-slate-900 block">Elaun Harian</span>
                     <span className="text-slate-500 text-[11px]">
-                      {driverBreakdown.dailyAllowanceDays} Hari x {formatMYR(driverBreakdown.dailyAllowanceRate)} <span className="text-emerald-800 font-medium">({formData.kawasan})</span>
+                      {driverBreakdown.dailyAllowanceDays} Hari x {formatMYR(driverBreakdown.dailyAllowanceRate)} ({formData.kawasan})
                     </span>
                   </div>
                   <span className="font-bold text-slate-900 text-sm">
@@ -302,10 +302,10 @@ export function Step4SummaryReport({
                 </div>
                 <p className="text-[11px] text-emerald-800 font-medium mt-1 leading-relaxed">
                   {driverBreakdown.dailyAllowanceDays > 0
-                    ? `* Layak ${driverBreakdown.dailyAllowanceDays} hari elaun harian kerana bertugas melebihi 24 jam (${durationInfo.totalHours.toFixed(1)} jam) dan lebihan masa bertugas pada hari terakhir melebihi 8 jam.`
+                    ? `* Layak: Bertugas > 24 jam (${durationInfo.totalHours.toFixed(1)}j) dengan lebihan masa hari terakhir > 8 jam.`
                     : durationInfo.totalHours <= 24
-                    ? `* Tidak layak elaun harian kerana bertugas hanya 1 hari (≤ 24 jam / ${durationInfo.totalHours.toFixed(1)} jam).`
-                    : `* Tidak layak elaun harian kerana bertugas melebihi 24 jam (${durationInfo.totalHours.toFixed(1)} jam) tetapi lebihan masa bertugas pada hari terakhir tidak melebihi 8 jam.`}
+                    ? `* Tidak layak: Tempoh bertugas ≤ 24 jam (${durationInfo.totalHours.toFixed(1)}j).`
+                    : `* Tidak layak: Lebihan masa hari terakhir ≤ 8 jam (${durationInfo.totalHours.toFixed(1)}j).`}
                 </p>
               </div>
 
@@ -314,7 +314,7 @@ export function Step4SummaryReport({
                 <div>
                   <span className="font-bold text-slate-900 block">Elaun Makan</span>
                   <span className="text-slate-500 text-[11px]">
-                    {driverBreakdown.mealAllowanceDays} Hari x {formatMYR(driverBreakdown.mealAllowanceRate)} <span className="text-emerald-800 font-medium">({formData.kawasan})</span>
+                    {driverBreakdown.mealAllowanceDays} Hari x {formatMYR(driverBreakdown.mealAllowanceRate)} ({formData.kawasan})
                   </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">

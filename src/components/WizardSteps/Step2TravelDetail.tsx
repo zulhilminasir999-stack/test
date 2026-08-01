@@ -446,12 +446,12 @@ export function Step2TravelDetail({
 
         {/* Section 4: Masa & Tempoh Tugasan */}
         <div className="space-y-4 pt-4 border-t border-slate-100" id="section-masa-tugasan">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
             <h3 className="text-xs uppercase font-bold text-slate-800 tracking-wider">
               Masa Tugasan / Perjalanan <span className="text-amber-600">*</span>
             </h3>
             {durationInfo.totalHours > 0 && (
-              <span className="text-xs font-bold font-sans text-slate-700">
+              <span className="text-xs font-bold font-sans text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md">
                 {durationInfo.formattedDuration} ({durationInfo.totalHours.toFixed(1)}j)
               </span>
             )}
