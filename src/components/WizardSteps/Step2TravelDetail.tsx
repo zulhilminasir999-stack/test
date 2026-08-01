@@ -478,17 +478,20 @@ export function Step2TravelDetail({
           )}
 
           {/* Automatic Allowance Summary */}
-          <div className="bg-amber-50/60 border border-amber-200/80 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-            <div>
-              <span className="text-slate-600 font-medium">Bilangan Hari: </span>
-              <span className="font-bold text-amber-950">{durationInfo.daysMakan} Hari</span>
-            </div>
-            {durationInfo.daysMakan >= 1 && (
-              <span className="text-amber-900 font-medium">
-                * Layak terima tuntutan {durationInfo.daysMakan} hari elaun harian dan makan
+          {durationInfo.totalHours > 0 && (
+            <div className="bg-amber-50/60 border border-amber-200/80 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div>
+                <span className="text-slate-600 font-medium">Kelayakan Tuntutan: </span>
+                <span className="font-bold text-amber-950">
+                  {durationInfo.daysMakan} Hari Elaun Makan
+                  {durationInfo.daysHarian > 0 ? `, ${durationInfo.daysHarian} Hari Elaun Harian` : ' (Tiada Elaun Harian)'}
+                </span>
+              </div>
+              <span className="text-amber-900/90 text-[11px] font-medium">
+                * Elaun makan (1 hari = 24 jam). Elaun harian layak 1 hari bagi lebihan &gt; 8 jam pada hari terakhir (tugasan &gt; 24 jam).
               </span>
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         {/* Section 5: Penginapan */}

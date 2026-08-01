@@ -38,11 +38,23 @@ export function calculateTravelDuration(
   const diffMs = endDate.getTime() - startDate.getTime();
   const totalHours = diffMs / (1000 * 60 * 60);
 
-  // Full 24-hour cycles = Elaun Makan & Elaun Harian
+  // Full 24-hour cycles = Elaun Makan (1 hari = 24 jam)
   const daysMakan = Math.floor(totalHours / 24);
 
-  // Elaun Harian sama dengan Elaun Makan
-  const daysHarian = daysMakan;
+  // Elaun Harian:
+  // - ไม่ layak sekiranya bertugas 1 hari sahaja (<= 24 jam).
+  // - Sekiranya bertugas > 24 jam, layak 1 Elaun Harian sekiranya lebihan pada hari terakhir > 8 jam
+  //   (atau jika bertugas melebihi 1 hari / 24 jam di mana hari terakhir bertugas > 8 jam).
+  let daysHarian = 0;
+  if (totalHours > 24) {
+    const remainingHours = totalHours % 24;
+    if (remainingHours > 8) {
+      daysHarian = 1;
+    } else if (remainingHours === 0 && daysMakan > 1) {
+      // Contoh: 48 jam (24jam + 24jam) -> hari terakhir adalah 24 jam (> 8 jam)
+      daysHarian = 1;
+    }
+  }
 
   const fullDays = Math.floor(totalHours / 24);
   const remHours = Math.floor(totalHours % 24);
