@@ -38,20 +38,21 @@ export function calculateTravelDuration(
   const diffMs = endDate.getTime() - startDate.getTime();
   const totalHours = diffMs / (1000 * 60 * 60);
 
-  // Full 24-hour cycles = Elaun Makan (1 hari = 24 jam)
-  const daysMakan = Math.floor(totalHours / 24);
-
-  // Elaun Harian:
-  // - ไม่ layak sekiranya bertugas 1 hari sahaja (<= 24 jam).
-  // - Sekiranya bertugas > 24 jam, layak 1 Elaun Harian sekiranya lebihan pada hari terakhir > 8 jam
-  //   (atau jika bertugas melebihi 1 hari / 24 jam di mana hari terakhir bertugas > 8 jam).
+  let daysMakan = Math.floor(totalHours / 24);
   let daysHarian = 0;
-  if (totalHours > 24) {
+
+  if (totalHours < 24) {
+    daysMakan = 0;
+    daysHarian = 0;
+  } else if (totalHours === 24) {
+    daysMakan = 1;
+    daysHarian = 0;
+  } else {
     const remainingHours = totalHours % 24;
-    if (remainingHours > 8) {
+    if (remainingHours >= 8) {
       daysHarian = 1;
-    } else if (remainingHours === 0 && daysMakan > 1) {
-      // Contoh: 48 jam (24jam + 24jam) -> hari terakhir adalah 24 jam (> 8 jam)
+    } else if (daysMakan > 1 && remainingHours === 0) {
+      // Jika capai tepat 48 jam, 72 jam, dll., hari terakhir (24j) adalah > 8 jam
       daysHarian = 1;
     }
   }
@@ -120,6 +121,10 @@ export function calculateClaim(
 
   let userMileageTotalAmount = 0;
 
+  // Bayaran tol HANYA Boleh claim sekiranya user TIDAK memakai pemandu (!gunaPemandu)
+  const rawToll = Math.max(0, formData.bayaranTol || 0);
+  const tollAmount = !gunaPemandu ? rawToll : 0;
+
   // Elaun jarak & penggunaan kenderaan HANYA dikira sekiranya user TIDAK memakai pemandu (!gunaPemandu)
   if (!gunaPemandu) {
     mileageFirst500Km = Math.min(totalEffectiveKm, 500);
@@ -156,12 +161,40 @@ export function calculateClaim(
   );
 
   let hotelRate = 0;
+  let maxHotelRate: number | undefined = undefined;
+  let enteredHotelPrice: number | undefined = undefined;
   let hotelRateLabel = '';
+
   const hotelRateVal = rankDetail?.hotel?.[kawasan];
   if (typeof hotelRateVal === 'number') {
-    hotelRate = hotelRateVal;
-    hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam`;
+    maxHotelRate = hotelRateVal;
+    if (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0) {
+      enteredHotelPrice = formData.jumlahHargaHotel;
+      const pricePerNight = hotelNights > 0 ? enteredHotelPrice / hotelNights : enteredHotelPrice;
+      // Capped at maximum claimable rate per night
+      hotelRate = Math.min(pricePerNight, maxHotelRate);
+      if (pricePerNight > maxHotelRate) {
+        hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam (Had Maksimum)`;
+      } else {
+        hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam (Ikut Resit)`;
+      }
+    } else {
+      // Default to maximum rate if no actual price specified
+      hotelRate = maxHotelRate;
+      hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam (Kadar Maksimum)`;
+    }
+  } else if (typeof hotelRateVal === 'string') {
+    // e.g. "Sebenar"
+    if (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0) {
+      enteredHotelPrice = formData.jumlahHargaHotel;
+      hotelRate = hotelNights > 0 ? enteredHotelPrice / hotelNights : enteredHotelPrice;
+      hotelRateLabel = `RM ${hotelRate.toFixed(2)} / malam (Sebenar)`;
+    } else {
+      hotelRate = 0;
+      hotelRateLabel = `Sebenar`;
+    }
   }
+
   const hotelAmount = hotelNights * hotelRate;
 
   // Flat rate Lojing for all users: W1 = RM 100, W2 = RM 120
@@ -178,6 +211,7 @@ export function calculateClaim(
 
   const userSubtotal =
     userMileageTotalAmount +
+    tollAmount +
     dailyAllowanceAmount +
     mealAllowanceAmount +
     totalAccommodationAmount;
@@ -191,6 +225,7 @@ export function calculateClaim(
     mileageAbove500Rate,
     mileageAbove500Amount,
     mileageTotalAmount: userMileageTotalAmount,
+    tollAmount,
     dailyAllowanceDays,
     dailyAllowanceRate,
     dailyAllowanceAmount,
@@ -204,6 +239,8 @@ export function calculateClaim(
     accommodationAmount: totalAccommodationAmount,
     hotelNights,
     hotelRate,
+    maxHotelRate,
+    enteredHotelPrice,
     hotelRateLabel,
     hotelAmount,
     lojingNights,

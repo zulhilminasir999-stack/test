@@ -137,6 +137,14 @@ export function Step2TravelDetail({
     }
   }
 
+  const getMalamString = (nights: number) => {
+    if (nights <= 1) return 'Se-Malam';
+    const numbers = ['Sifar', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Lapan', 'Sembilan', 'Sepuluh'];
+    return (numbers[nights] || nights.toString()) + ' Malam';
+  };
+
+  const hotelPlaceholderText = `Masukkan Jumlah Harga Hotel ${getMalamString(currentHotelNights)}`;
+
   const isHotelSelected =
     !isLessThanOneDay &&
     (formData.jenisPenginapan === 'Hotel' ||
@@ -229,13 +237,15 @@ export function Step2TravelDetail({
     setSubmitted(true);
 
     const isTarikhValid = formData.tarikhMula && formData.tarikhTamat && durationInfo.totalHours > 0;
+    const isHargaHotelValid = !isHotelSelected || (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0);
 
     if (
       !isPangkatValid ||
       !isJenisKenderaanValid ||
       !isJumlahKmValid ||
       !isKawasanValid ||
-      !isTarikhValid
+      !isTarikhValid ||
+      !isHargaHotelValid
     ) {
       return;
     }
@@ -322,7 +332,7 @@ export function Step2TravelDetail({
                       jumlahKm: Math.max(0, parseFloat(e.target.value) || 0),
                     })
                   }
-                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-amber-500 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-amber-500 [&::-webkit-slider-thumb]:hover:bg-amber-600 [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:shadow-sm [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-amber-500 [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:cursor-pointer"
+                  className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-orange-500 [&::-webkit-slider-thumb]:hover:bg-orange-600 [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:shadow-sm [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-orange-500 [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:cursor-pointer"
                 />
                 <div className="relative shrink-0">
                   <input
@@ -338,7 +348,7 @@ export function Step2TravelDetail({
                       })
                     }
                     placeholder="0"
-                    className={`w-28 px-3 py-2 bg-white border rounded-lg text-slate-800 text-sm font-semibold text-right pr-9 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all ${
+                    className={`w-28 px-3 py-2 bg-white border rounded-lg text-slate-800 text-sm font-semibold text-right pr-9 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all ${
                       submitted && !isJumlahKmValid
                         ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
                         : 'border-slate-300 hover:border-slate-400'
@@ -359,7 +369,7 @@ export function Step2TravelDetail({
                     onClick={() => updateFormData({ jumlahKm: preset })}
                     className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-all shrink-0 active:scale-95 touch-manipulation ${
                       formData.jumlahKm === preset
-                        ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
+                        ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
                         : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
                     }`}
                   >
@@ -372,6 +382,43 @@ export function Step2TravelDetail({
             {submitted && !isJumlahKmValid && (
               <p className="text-xs text-red-600 font-semibold mt-1">Sila masukkan Jumlah Kilometer (KM) yang sah</p>
             )}
+          </div>
+
+          {/* Bayaran Tol */}
+          <div className="space-y-2 pt-1">
+            <div className="flex justify-between items-center">
+              <label htmlFor="input-bayaran-tol" className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
+                Masukkan Jumlah Bayaran Tol (RM)
+              </label>
+              {formData.gunaPemandu && (
+                <span className="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                  Kenderaan Berpemandu (Tol Tidak Dikira)
+                </span>
+              )}
+            </div>
+
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">
+                RM
+              </span>
+              <input
+                type="number"
+                id="input-bayaran-tol"
+                min="0"
+                step="0.01"
+                disabled={formData.gunaPemandu}
+                value={formData.bayaranTol || ''}
+                onChange={(e) =>
+                  updateFormData({
+                    bayaranTol: Math.max(0, parseFloat(e.target.value) || 0),
+                  })
+                }
+                placeholder="0.00"
+                className={`w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-800 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all ${
+                  formData.gunaPemandu ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-slate-200' : 'hover:border-slate-400'
+                }`}
+              />
+            </div>
           </div>
         </div>
 
@@ -487,9 +534,6 @@ export function Step2TravelDetail({
                   {durationInfo.daysHarian > 0 ? `, ${durationInfo.daysHarian} Hari Elaun Harian` : ' (Tiada Elaun Harian)'}
                 </span>
               </div>
-              <span className="text-amber-900/90 text-[11px] font-medium">
-                * Elaun makan (1 hari = 24 jam). Elaun harian layak 1 hari bagi lebihan &gt; 8 jam pada hari terakhir (tugasan &gt; 24 jam).
-              </span>
             </div>
           )}
         </div>
@@ -511,23 +555,70 @@ export function Step2TravelDetail({
               </div>
             </div>
           ) : (
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-slate-700">
-                Pilih Jenis Penginapan <span className="text-amber-600">*</span>
-              </label>
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-slate-700">
+                  Pilih Jenis Penginapan <span className="text-amber-600">*</span>
+                </label>
 
-              <SearchableDropdown<AccommodationType | ''>
-                id="dropdown-penginapan"
-                required
-                hideBadge
-                hasError={submitted && !formData.jenisPenginapan}
-                options={accommodationOptions}
-                value={formData.jenisPenginapan || (isHotelSelected ? 'Hotel' : isLojingSelected ? 'Lojing' : '')}
-                onChange={(val) => handleAccommodationChange(val)}
-                placeholder="Pilih Jenis Penginapan"
-              />
-              {submitted && !formData.jenisPenginapan && (
-                <p className="text-xs text-red-600 font-semibold mt-1">Sila pilih jenis penginapan</p>
+                <SearchableDropdown<AccommodationType | ''>
+                  id="dropdown-penginapan"
+                  required
+                  hideBadge
+                  hasError={submitted && !formData.jenisPenginapan}
+                  options={accommodationOptions}
+                  value={formData.jenisPenginapan || (isHotelSelected ? 'Hotel' : isLojingSelected ? 'Lojing' : '')}
+                  onChange={(val) => handleAccommodationChange(val)}
+                  placeholder="Pilih Jenis Penginapan"
+                />
+                {submitted && !formData.jenisPenginapan && (
+                  <p className="text-xs text-red-600 font-semibold mt-1">Sila pilih jenis penginapan</p>
+                )}
+              </div>
+
+              {/* Harga Hotel Se-malam Input (Bagi Pilihan Hotel) */}
+              {isHotelSelected && (
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <div className="flex justify-between items-center">
+                    <label htmlFor="input-harga-hotel" className="block text-xs capitalize font-bold text-slate-700 tracking-wider">
+                      Masukkan Jumlah Harga Hotel <span className="text-amber-600">*</span>
+                    </label>
+                  </div>
+
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs md:text-sm font-medium text-slate-400 pointer-events-none">
+                      RM
+                    </span>
+                    <input
+                      type="number"
+                      id="input-harga-hotel"
+                      min="0"
+                      step="0.01"
+                      value={formData.jumlahHargaHotel || ''}
+                      onChange={(e) =>
+                        updateFormData({
+                          jumlahHargaHotel: Math.max(0, parseFloat(e.target.value) || 0),
+                        })
+                      }
+                      placeholder={hotelPlaceholderText}
+                      className={`w-full pl-9 pr-4 py-2.5 bg-white border rounded-xl text-slate-800 text-base md:text-sm font-medium focus:outline-none focus:ring-2 focus:border-amber-500 transition-all placeholder:text-transparent sm:placeholder:text-slate-400 ${
+                        submitted && (!formData.jumlahHargaHotel || formData.jumlahHargaHotel <= 0)
+                          ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
+                          : 'border-slate-300 hover:border-slate-400 focus:ring-amber-500/20'
+                      }`}
+                    />
+                    {(!formData.jumlahHargaHotel || formData.jumlahHargaHotel === 0) && (
+                      <div className="absolute left-9 right-4 top-1/2 -translate-y-1/2 overflow-hidden pointer-events-none sm:hidden flex items-center h-full">
+                        <span className="text-base text-slate-400 font-normal animate-marquee-mobile">
+                          {hotelPlaceholderText}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  {submitted && (!formData.jumlahHargaHotel || formData.jumlahHargaHotel <= 0) && (
+                    <p className="text-xs text-red-600 font-semibold mt-1">Sila masukkan Jumlah Harga Hotel</p>
+                  )}
+                </div>
               )}
             </div>
           )}

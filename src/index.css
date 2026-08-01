@@ -39,3 +39,19 @@ html.lenis {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+@keyframes marquee-mobile {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee-mobile {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@media (max-width: 639px) {
+  .animate-marquee-mobile {
+    animation: marquee-mobile 8s linear infinite;
+  }
+}

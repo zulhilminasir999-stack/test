@@ -45,6 +45,7 @@ export interface ClaimFormData {
   pangkat: RankType | '';
   jenisKenderaan: VehicleType | '';
   jumlahKm: number;
+  bayaranTol?: number;
   kawasan: AreaType | '';
   bilHariElaunHarian: number;
   bilHariElaunMakan: number;
@@ -52,6 +53,7 @@ export interface ClaimFormData {
   jenisPenginapan: AccommodationType;
   bilMalamHotel?: number;
   bilMalamLojing?: number;
+  jumlahHargaHotel?: number;
   kadarHotelBiasaActual?: number; // Custom rate for Brig Jen if actual receipt amount is specified
 
   // Step 3: Maklumat Pemandu
@@ -81,6 +83,7 @@ export interface UserClaimBreakdown {
   mileageAbove500Amount: number;
   
   mileageTotalAmount: number;
+  tollAmount: number;
   
   dailyAllowanceDays: number;
   dailyAllowanceRate: number;
@@ -98,6 +101,8 @@ export interface UserClaimBreakdown {
   
   hotelNights: number;
   hotelRate: number;
+  maxHotelRate?: number;
+  enteredHotelPrice?: number;
   hotelRateLabel: string;
   hotelAmount: number;
   

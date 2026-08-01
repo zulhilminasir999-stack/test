@@ -39,6 +39,7 @@ const initialFormData: ClaimFormData = {
   pangkat: '',
   jenisKenderaan: '',
   jumlahKm: 0,
+  bayaranTol: 0,
   kawasan: '',
   bilHariElaunHarian: 0,
   bilHariElaunMakan: 0,
@@ -46,6 +47,7 @@ const initialFormData: ClaimFormData = {
   jenisPenginapan: '',
   bilMalamHotel: 0,
   bilMalamLojing: 0,
+  jumlahHargaHotel: 0,
 
   // Step 3
   gunaPemandu: false,

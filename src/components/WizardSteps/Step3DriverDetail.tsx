@@ -93,7 +93,7 @@ export function Step3DriverDetail({
                   <ul className="list-disc pl-5 space-y-0.5 text-xs font-medium text-emerald-800">
                     <li>Elaun Harian</li>
                     <li>Elaun Makan</li>
-                    <li>Penginapan (kadar sama seperti pengguna)</li>
+                    <li>Penginapan (kadar sama seperti anggota)</li>
                   </ul>
                   <p className="text-[11px] italic text-emerald-700/90 pt-0.5">
                     * Elaun jarak / penggunaan kenderaan tidak dikira apabila menggunakan pemandu
