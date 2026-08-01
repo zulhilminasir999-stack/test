@@ -64,6 +64,16 @@ export default function App() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
+  // Smooth scroll to top when step changes
+  React.useEffect(() => {
+    const lenis = (window as unknown as { lenis?: { scrollTo: (target: number) => void } }).lenis;
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [step]);
+
   const updateFormData = (updates: Partial<ClaimFormData>) => {
     setFormData((prev) => ({ ...prev, ...updates }));
   };

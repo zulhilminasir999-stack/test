@@ -1,5 +1,6 @@
 import React from 'react';
 import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = React.useRef<Lenis | null>(null);
@@ -13,11 +14,12 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.1,
       touchMultiplier: 2,
     });
 
     lenisRef.current = lenis;
+    (window as unknown as { lenis: Lenis }).lenis = lenis;
 
     // RAF loop
     const raf = (time: number) => {
@@ -39,3 +41,4 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
 
   return <>{children}</>;
 }
+
