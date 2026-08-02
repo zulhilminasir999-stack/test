@@ -97,10 +97,10 @@ export default function App() {
   const liveResult = calculateClaim(formData, rateConfig);
 
   const stepsList = [
-    { num: 1, title: 'Maklumat Pengguna', sub: 'Nama & ID Tentera' },
-    { num: 2, title: 'Perjalanan & Kelayakan', sub: 'Pangkat, KM & Elaun' },
-    { num: 3, title: 'Maklumat Pemandu', sub: 'Kelayakan Pemandu' },
-    { num: 4, title: 'Rumusan Tuntutan', sub: 'Penyata & Cetak' },
+    { num: 1, title: 'Maklumat Pengguna', short: 'Maklumat\nPengguna', sub: 'Nama & ID Tentera' },
+    { num: 2, title: 'Perjalanan & Kelayakan', short: 'Perjalanan &\nKelayakan', sub: 'Pangkat, KM & Elaun' },
+    { num: 3, title: 'Maklumat Pemandu', short: 'Maklumat\nPemandu', sub: 'Kelayakan Pemandu' },
+    { num: 4, title: 'Rumusan Tuntutan', short: 'Rumusan\nTuntutan', sub: 'Penyata & Cetak' },
   ];
 
   return (
@@ -160,7 +160,7 @@ export default function App() {
                 </button>
 
                 <span
-                  className={`text-[9px] sm:text-[11px] font-bold tracking-wider leading-tight transition-colors text-center px-0.5 ${
+                  className={`text-[9px] sm:text-[11px] font-bold tracking-wider leading-tight transition-colors text-center px-0.5 whitespace-pre-line ${
                     isCurrent
                       ? 'text-orange-600'
                       : isCompleted
@@ -168,7 +168,8 @@ export default function App() {
                       : 'text-slate-400'
                   }`}
                 >
-                  {s.title}
+                  <span className="hidden sm:inline">{s.title}</span>
+                  <span className="sm:hidden">{s.short}</span>
                 </span>
 
                 {!isLast && (
