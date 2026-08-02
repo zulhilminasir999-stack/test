@@ -386,7 +386,7 @@ export function Step2TravelDetail({
 
           {/* Bayaran Tol */}
           <div className="space-y-2 pt-1">
-            <div className="flex justify-between items-center mb-1.5">
+            <div className="flex justify-between items-center mb-3">
               <span className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
                 BAYARAN TOL (RM)
               </span>
