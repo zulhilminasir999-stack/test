@@ -290,9 +290,24 @@ export function calculateClaim(
     let driverAccomAmount = 0;
 
     if (!pemanduDisediakanKemudahan) {
-      // Driver gets the same accommodation claim rate & amount as user
-      driverAccomAmount = totalAccommodationAmount;
-      driverAccomRate = hotelNights > 0 ? hotelRate : lojingRate;
+      const maxDriverHotelRate = typeof driverRankDetail?.hotel?.[kawasan] === 'number'
+        ? driverRankDetail.hotel[kawasan]
+        : 200;
+      const driverLojingRate = typeof driverRankDetail?.lojing?.[kawasan] === 'number'
+        ? driverRankDetail.lojing[kawasan]
+        : (kawasan === 'W2' ? 120 : 100);
+
+      let driverHotelRate = maxDriverHotelRate;
+      if (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0 && hotelNights > 0) {
+        const pricePerNight = formData.jumlahHargaHotel / hotelNights;
+        driverHotelRate = Math.min(pricePerNight, maxDriverHotelRate);
+      }
+
+      const driverHotelAmount = hotelNights * driverHotelRate;
+      const driverLojingAmount = lojingNights * driverLojingRate;
+
+      driverAccomAmount = driverHotelAmount + driverLojingAmount;
+      driverAccomRate = hotelNights > 0 ? driverHotelRate : (lojingNights > 0 ? driverLojingRate : driverHotelRate);
     }
 
     const driverSubtotal =

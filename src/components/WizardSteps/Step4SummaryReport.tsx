@@ -270,7 +270,7 @@ export function Step4SummaryReport({
 
             {/* Green Nota Banner */}
             <div className="bg-emerald-100/80 p-3 rounded-xl text-xs text-emerald-900 font-medium">
-              <strong>Nota:</strong> Kadar harian & makan mengikut <strong>Pbt – PW1</strong>.
+              <strong>Nota:</strong> Kadar harian, makan & penginapan mengikut <strong>PBT - PW1</strong>.
             </div>
 
             <div className="divide-y divide-emerald-200/60 text-xs">
@@ -278,9 +278,6 @@ export function Step4SummaryReport({
               <div className="py-2.5 flex justify-between items-center">
                 <div>
                   <span className="font-bold text-slate-900 block">Tuntutan KM (Pergi & Balik)</span>
-                  <span className="text-emerald-800 font-medium text-[11px]">
-                    * Pemandu disediakan (Tiada tuntutan KM)
-                  </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
                   {formatMYR(driverBreakdown.mileageTotalAmount)}
@@ -327,7 +324,7 @@ export function Step4SummaryReport({
                 <div>
                   <span className="font-bold text-slate-900 block">Penginapan</span>
                   <span className="text-slate-500 text-[11px]">
-                    {driverBreakdown.accommodationNights} Malam x {formatMYR(driverBreakdown.accommodationRate)} (Kadar sama anggota)
+                    {driverBreakdown.accommodationNights} Malam x {formatMYR(driverBreakdown.accommodationRate)} ({formData.kawasan})
                   </span>
                 </div>
                 <span className="font-bold text-slate-900 text-sm">
@@ -338,7 +335,7 @@ export function Step4SummaryReport({
               <p className="py-2 text-[11px] italic text-emerald-800 font-medium">
                 {driverBreakdown.isAccommodationProvided
                   ? '* Penginapan pemandu telah disediakan (Tiada tuntutan penginapan)'
-                  : '* Kadar penginapan pemandu disamakan mengikut kelayakan penginapan anggota'}
+                  : `* Kadar penginapan pemandu mengikut kelayakan PBT – PW1 (${formData.kawasan})`}
               </p>
             </div>
 
