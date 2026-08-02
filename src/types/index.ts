@@ -61,6 +61,8 @@ export interface ClaimFormData {
   namaPemandu?: string;
   noTenteraPemandu?: string;
   pemanduDisediakanKemudahan: boolean; // Adakah penginapan & makan pemandu disediakan?
+  jenisPenginapanPemandu?: AccommodationType;
+  jumlahHargaHotelPemandu?: number;
 }
 
 export interface BreakdownItem {
@@ -127,6 +129,7 @@ export interface DriverClaimBreakdown {
   mealAllowanceAmount: number;
   isMealProvided: boolean;
   
+  accommodationType?: AccommodationType;
   accommodationNights: number;
   accommodationRate: number;
   accommodationAmount: number;

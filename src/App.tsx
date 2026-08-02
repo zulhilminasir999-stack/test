@@ -54,6 +54,8 @@ const initialFormData: ClaimFormData = {
   namaPemandu: '',
   noTenteraPemandu: '',
   pemanduDisediakanKemudahan: false,
+  jenisPenginapanPemandu: 'Hotel',
+  jumlahHargaHotelPemandu: 0,
 };
 
 export default function App() {

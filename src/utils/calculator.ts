@@ -288,8 +288,10 @@ export function calculateClaim(
     // Driver Accommodation
     let driverAccomRate = 0;
     let driverAccomAmount = 0;
+    let driverAccomType: AccommodationType | undefined = undefined;
 
     if (!pemanduDisediakanKemudahan) {
+      driverAccomType = formData.jenisPenginapanPemandu || 'Hotel';
       const maxDriverHotelRate = typeof driverRankDetail?.hotel?.[kawasan] === 'number'
         ? driverRankDetail.hotel[kawasan]
         : 200;
@@ -297,17 +299,22 @@ export function calculateClaim(
         ? driverRankDetail.lojing[kawasan]
         : (kawasan === 'W2' ? 120 : 100);
 
-      let driverHotelRate = maxDriverHotelRate;
-      if (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0 && hotelNights > 0) {
-        const pricePerNight = formData.jumlahHargaHotel / hotelNights;
-        driverHotelRate = Math.min(pricePerNight, maxDriverHotelRate);
+      if (driverAccomType === 'Lojing') {
+        driverAccomRate = driverLojingRate;
+        driverAccomAmount = totalAccommodationNights * driverLojingRate;
+      } else {
+        // Hotel
+        let driverHotelRate = maxDriverHotelRate;
+        if (typeof formData.jumlahHargaHotelPemandu === 'number' && formData.jumlahHargaHotelPemandu > 0 && totalAccommodationNights > 0) {
+          const pricePerNight = formData.jumlahHargaHotelPemandu / totalAccommodationNights;
+          driverHotelRate = Math.min(pricePerNight, maxDriverHotelRate);
+        } else if (typeof formData.jumlahHargaHotel === 'number' && formData.jumlahHargaHotel > 0 && totalAccommodationNights > 0 && (!formData.jumlahHargaHotelPemandu || formData.jumlahHargaHotelPemandu === 0)) {
+          const pricePerNight = formData.jumlahHargaHotel / totalAccommodationNights;
+          driverHotelRate = Math.min(pricePerNight, maxDriverHotelRate);
+        }
+        driverAccomRate = driverHotelRate;
+        driverAccomAmount = totalAccommodationNights * driverHotelRate;
       }
-
-      const driverHotelAmount = hotelNights * driverHotelRate;
-      const driverLojingAmount = lojingNights * driverLojingRate;
-
-      driverAccomAmount = driverHotelAmount + driverLojingAmount;
-      driverAccomRate = hotelNights > 0 ? driverHotelRate : (lojingNights > 0 ? driverLojingRate : driverHotelRate);
     }
 
     const driverSubtotal =
@@ -326,6 +333,7 @@ export function calculateClaim(
       mealAllowanceRate: driverMealRate,
       mealAllowanceAmount: driverMealAmount,
       isMealProvided: false,
+      accommodationType: driverAccomType,
       accommodationNights: totalAccommodationNights,
       accommodationRate: driverAccomRate,
       accommodationAmount: driverAccomAmount,

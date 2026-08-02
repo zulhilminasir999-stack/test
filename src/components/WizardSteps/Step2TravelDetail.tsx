@@ -390,11 +390,6 @@ export function Step2TravelDetail({
               <span className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
                 BAYARAN TOL (RM)
               </span>
-              {formData.gunaPemandu && (
-                <span className="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                  Kenderaan Berpemandu (Tol Tidak Dikira)
-                </span>
-              )}
             </div>
             <label htmlFor="input-bayaran-tol" className="block text-xs font-semibold text-slate-700">
               Masukkan Jumlah Bayaran Tol <span className="text-amber-600">*</span>

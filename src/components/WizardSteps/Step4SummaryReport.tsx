@@ -322,7 +322,9 @@ export function Step4SummaryReport({
               {/* Penginapan */}
               <div className="py-2.5 flex justify-between items-center">
                 <div>
-                  <span className="font-bold text-slate-900 block">Penginapan</span>
+                  <span className="font-bold text-slate-900 block">
+                    Penginapan {driverBreakdown.accommodationType ? `(${driverBreakdown.accommodationType})` : ''}
+                  </span>
                   <span className="text-slate-500 text-[11px]">
                     {driverBreakdown.accommodationNights} Malam x {formatMYR(driverBreakdown.accommodationRate)} ({formData.kawasan})
                   </span>
@@ -335,7 +337,7 @@ export function Step4SummaryReport({
               <p className="py-2 text-[11px] italic text-emerald-800 font-medium">
                 {driverBreakdown.isAccommodationProvided
                   ? '* Penginapan pemandu telah disediakan (Tiada tuntutan penginapan)'
-                  : `* Kadar penginapan pemandu mengikut kelayakan PBT – PW1 (${formData.kawasan})`}
+                  : `* Kadar penginapan pemandu (${driverBreakdown.accommodationType || 'Hotel'}) mengikut kelayakan PBT – PW1 (${formData.kawasan})`}
               </p>
             </div>
 
