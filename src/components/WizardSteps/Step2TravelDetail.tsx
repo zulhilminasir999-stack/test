@@ -269,7 +269,7 @@ export function Step2TravelDetail({
         {/* Section 1: Pangkat */}
         <div className="space-y-2">
           <label className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
-            Pangkat <span className="text-amber-600">*</span>
+            Pangkat
           </label>
           <SearchableDropdown<RankType | ''>
             id="dropdown-pangkat"
@@ -386,16 +386,19 @@ export function Step2TravelDetail({
 
           {/* Bayaran Tol */}
           <div className="space-y-2 pt-1">
-            <div className="flex justify-between items-center">
-              <label htmlFor="input-bayaran-tol" className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
-                Masukkan Jumlah Bayaran Tol (RM)
-              </label>
+            <div className="flex justify-between items-center mb-1.5">
+              <span className="block text-xs uppercase font-bold text-slate-700 tracking-wider">
+                BAYARAN TOL (RM)
+              </span>
               {formData.gunaPemandu && (
                 <span className="text-[11px] font-medium text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                   Kenderaan Berpemandu (Tol Tidak Dikira)
                 </span>
               )}
             </div>
+            <label htmlFor="input-bayaran-tol" className="block text-xs font-semibold text-slate-700">
+              Masukkan Jumlah Bayaran Tol <span className="text-amber-600">*</span>
+            </label>
 
             <div className="relative">
               <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 pointer-events-none">
@@ -425,7 +428,7 @@ export function Step2TravelDetail({
         {/* Section 3: Kawasan Wilayah */}
         <div className="space-y-3 pt-4 border-t border-slate-100">
           <h3 className="text-xs uppercase font-bold text-slate-800 tracking-wider">
-            Kawasan Wilayah <span className="text-amber-600">*</span>
+            Kawasan Wilayah
           </h3>
 
           <div>
@@ -448,7 +451,7 @@ export function Step2TravelDetail({
         <div className="space-y-4 pt-4 border-t border-slate-100" id="section-masa-tugasan">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
             <h3 className="text-xs uppercase font-bold text-slate-800 tracking-wider">
-              Masa Tugasan / Perjalanan <span className="text-amber-600">*</span>
+              Masa Tugasan / Perjalanan
             </h3>
             {durationInfo.totalHours > 0 && (
               <span className="text-xs font-bold font-sans text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md">
@@ -467,8 +470,8 @@ export function Step2TravelDetail({
                 required
                 value={formData.tarikhMula || ''}
                 onChange={(e) => updateFormData({ tarikhMula: e.target.value })}
-                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none ${
-                  !formData.tarikhMula ? 'text-slate-400 font-normal' : 'text-slate-800 font-medium'
+                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                  !formData.tarikhMula ? 'text-slate-500 font-normal' : 'text-slate-800 font-medium'
                 }`}
               />
             </div>
@@ -481,8 +484,8 @@ export function Step2TravelDetail({
                 required
                 value={formData.masaMula || ''}
                 onChange={(e) => updateFormData({ masaMula: e.target.value })}
-                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none ${
-                  !formData.masaMula ? 'text-slate-400 font-normal' : 'text-slate-800 font-medium'
+                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                  !formData.masaMula ? 'text-slate-500 font-normal' : 'text-slate-800 font-medium'
                 }`}
               />
             </div>
@@ -495,8 +498,8 @@ export function Step2TravelDetail({
                 required
                 value={formData.tarikhTamat || ''}
                 onChange={(e) => updateFormData({ tarikhTamat: e.target.value })}
-                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none ${
-                  !formData.tarikhTamat ? 'text-slate-400 font-normal' : 'text-slate-800 font-medium'
+                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                  !formData.tarikhTamat ? 'text-slate-500 font-normal' : 'text-slate-800 font-medium'
                 }`}
               />
             </div>
@@ -509,8 +512,8 @@ export function Step2TravelDetail({
                 required
                 value={formData.masaTamat || ''}
                 onChange={(e) => updateFormData({ masaTamat: e.target.value })}
-                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 appearance-none ${
-                  !formData.masaTamat ? 'text-slate-400 font-normal' : 'text-slate-800 font-medium'
+                className={`w-full px-3 py-2.5 bg-white border border-slate-300 rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                  !formData.masaTamat ? 'text-slate-500 font-normal' : 'text-slate-800 font-medium'
                 }`}
               />
             </div>

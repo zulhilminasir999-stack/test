@@ -11,11 +11,23 @@
   html, body, input, button, select, textarea {
     font-family: "Satoshi", sans-serif;
   }
-  /* Prevent iOS auto-zoom on input focus */
+  /* Prevent iOS auto-zoom on input focus & fix date/time input display */
   @media screen and (max-width: 767px) {
     input, select, textarea {
       font-size: 16px !important;
     }
+  }
+
+  input[type="date"]::-webkit-date-and-time-value,
+  input[type="time"]::-webkit-date-and-time-value {
+    text-align: left;
+    min-height: 1.4em;
+    display: flex;
+    align-items: center;
+  }
+
+  input[type="date"], input[type="time"] {
+    min-height: 44px;
   }
 }
 
