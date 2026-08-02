@@ -27,6 +27,9 @@
   }
 
   input[type="date"], input[type="time"] {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
     min-height: 44px;
     max-width: 100%;
     box-sizing: border-box;
