@@ -28,6 +28,9 @@
 
   input[type="date"], input[type="time"] {
     min-height: 44px;
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
   }
 }
 

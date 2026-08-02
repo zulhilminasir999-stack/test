@@ -462,7 +462,7 @@ export function Step2TravelDetail({
 
           {/* Tarikh & Masa Inputs Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <label htmlFor="input-tarikh-mula" className="block text-xs font-semibold text-slate-700">
                 Tarikh Mula
               </label>
@@ -472,7 +472,7 @@ export function Step2TravelDetail({
                 required
                 value={formData.tarikhMula || ''}
                 onChange={(e) => updateFormData({ tarikhMula: e.target.value })}
-                className={`w-full px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                className={`w-full max-w-full box-border px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
                   submitted && (!formData.tarikhMula || !isTarikhValid)
                     ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
                     : 'border-slate-300 hover:border-slate-400'
@@ -482,7 +482,7 @@ export function Step2TravelDetail({
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <label htmlFor="input-masa-mula" className="block text-xs font-semibold text-slate-700">
                 Masa Mula
               </label>
@@ -492,7 +492,7 @@ export function Step2TravelDetail({
                 required
                 value={formData.masaMula || ''}
                 onChange={(e) => updateFormData({ masaMula: e.target.value })}
-                className={`w-full px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                className={`w-full max-w-full box-border px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
                   submitted && (!formData.masaMula || !isTarikhValid)
                     ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
                     : 'border-slate-300 hover:border-slate-400'
@@ -502,7 +502,7 @@ export function Step2TravelDetail({
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <label htmlFor="input-tarikh-tamat" className="block text-xs font-semibold text-slate-700">
                 Tarikh Tamat
               </label>
@@ -512,7 +512,7 @@ export function Step2TravelDetail({
                 required
                 value={formData.tarikhTamat || ''}
                 onChange={(e) => updateFormData({ tarikhTamat: e.target.value })}
-                className={`w-full px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                className={`w-full max-w-full box-border px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
                   submitted && (!formData.tarikhTamat || !isTarikhValid)
                     ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
                     : 'border-slate-300 hover:border-slate-400'
@@ -522,7 +522,7 @@ export function Step2TravelDetail({
               />
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <label htmlFor="input-masa-tamat" className="block text-xs font-semibold text-slate-700">
                 Masa Tamat
               </label>
@@ -532,7 +532,7 @@ export function Step2TravelDetail({
                 required
                 value={formData.masaTamat || ''}
                 onChange={(e) => updateFormData({ masaTamat: e.target.value })}
-                className={`w-full px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
+                className={`w-full max-w-full box-border px-3.5 py-2.5 bg-white border rounded-xl text-base md:text-sm transition-all shadow-2xs focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 min-h-[44px] ${
                   submitted && (!formData.masaTamat || !isTarikhValid)
                     ? 'border-red-500 ring-2 ring-red-500/20 bg-red-50/20'
                     : 'border-slate-300 hover:border-slate-400'
