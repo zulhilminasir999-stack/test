@@ -112,7 +112,7 @@ export default function App() {
       <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-4 flex justify-between items-center sticky top-0 z-40 shadow-xs relative">
         <div className="flex-1 text-center">
           <h1 className="text-sm sm:text-base font-bold text-slate-800 leading-tight uppercase tracking-tight text-center">
-            PORTAL TUNTUTAN PERJALANAN ANGGOTA
+            KIRAAN TUNTUTAN TUGAS RASMI 2026
           </h1>
           <p className="text-xs text-slate-500 font-medium text-center">Angkatan Tentera Malaysia (ATM)</p>
         </div>
