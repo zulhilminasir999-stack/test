@@ -99,7 +99,7 @@ export default function App() {
   const liveResult = calculateClaim(formData, rateConfig);
 
   const stepsList = [
-    { num: 1, title: 'Maklumat Pengguna', short: 'Maklumat\nPengguna', sub: 'Nama & ID Tentera' },
+    { num: 1, title: 'Maklumat Anggota', short: 'Maklumat\nAnggota', sub: 'Nama & ID Tentera' },
     { num: 2, title: 'Perjalanan & Kelayakan', short: 'Perjalanan &\nKelayakan', sub: 'Pangkat, KM & Elaun' },
     { num: 3, title: 'Maklumat Pemandu', short: 'Maklumat\nPemandu', sub: 'Kelayakan Pemandu' },
     { num: 4, title: 'Rumusan Tuntutan', short: 'Rumusan\nTuntutan', sub: 'Penyata & Cetak' },
