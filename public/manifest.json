@@ -1,0 +1,23 @@
+{
+  "name": "Kiraan Tuntutan Tugas Rasmi ATM 2026",
+  "short_name": "KTTR 2026",
+  "description": "Portal Kiraan Tuntutan Perjalanan Tugas Rasmi Angkatan Tentera Malaysia",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#f97316",
+  "icons": [
+    {
+      "src": "/src/assets/images/KTTR2026.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/src/assets/images/KTTR2026.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
